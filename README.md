@@ -39,7 +39,7 @@ npm i -D webpack-cli # permet de manipuler plus facilement webpack
 npm i -D webpack-dev-server # permet d'obtenir un CLI permettant d'exécuter un serveur de développement (live-reload)
 
 npm i -D @babel/core # le noyau du transpilateur Babel
-npm i babel-loader
+npm i -D babel-loader
 
 npm i -D @babel/preset-react # permet à Babel d'interpréter pour ensuite transpiler du JSX
 
@@ -65,51 +65,48 @@ const HTMLWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 
-/**
-  * Il s'agit du fichier d'entrée de l'application, qui doit contenir toutes les importations
-  * de nos dépendances / bundles, qui sera ensuite transpilé par webpack.
-  *
-  * Soit en l'occurrence ici, notre fichier principal contenant notre code JSX.
-  *
-  * Dans un temps normal, hors-React, nous aurions rédigé les instructions suivantes : 
-  *
-  * const <module> = require('module')
-  */
-  
-    entry: './src/index.js',
-  
+  /**
+   * Il s'agit du fichier d'entrée de l'application, qui doit contenir toutes les importations
+   * de nos dépendances / bundles, qui sera ensuite transpilé par webpack.
+   *
+   * Soit en l'occurrence ici, notre fichier principal contenant notre code JSX.
+   *
+   * Dans un temps normal, hors-React, nous aurions rédigé les instructions suivantes :
+   *
+   * const <module> = require('module')
+   */
+
+  entry: './src/index.js',
+
   // Nous devons préciser comment doit être généré les fichiers qui utilisent des bundles (pour une PRODUCTION -> production build)
-    output: {
-         path: path.join(__dirname, '/dist'), // endroit où le fichier devra être transpilé
-         filename: 'bundle.js', // sera le nom du fichier transpilé
-         
-    },
-    // Informer à webpack, qu'il faudra injecter le fichier bundle.js dans un fichier index.html (ajout d'une instruction <script src...>)
-    plugins : [
-    	new HTMLWebpackPlugin({
-    	     template: './src/index.html'
-    	})
-    ],
-    
-    // On demande à Webpack, quel loader utiliser (quel transpilateur)
-    module: {
-        rules: [
-            {
-            	test: /.js$/, // n'accepter que les fichiers JS
-            	exclude: /node_modules/, // ignorer le dossier node_modules
-            	use: { // on précise quel loader utiliser
-        	     loader: 'babel-loader',
-        	     // On souhaite que Babel puisse accepter dans sa transpilation, la plus récente version de JS (preset-env), et comprendre le JSX (preset-react)
-        	     options: {
-        	         presets: ['@babel/preset-env', '@babel/preset-react']
-        	     }
-            	}
-            }
+  output: {
+    path: path.join(__dirname, '/dist'), // endroit où le fichier devra être transpilé
+    filename: 'bundle.js', // sera le nom du fichier transpilé
+
+  },
+  // Informer à webpack, qu'il faudra injecter le fichier bundle.js dans un fichier index.html (ajout d'une instruction <script src...>)
+  plugins: [
+    new HTMLWebpackPlugin({
+      template: './src/index.html'
+    })
+  ],
+
+  // On demande à Webpack, quel loader utiliser (quel transpilateur)
+  module: {
+    rules: [
+      {
+        test: /.(js|jsx)$/, // n'accepter que les fichiers JS et JSX
+        exclude: /node_modules/, // ignorer le dossier node_modules
+        use: { // on précise quel loader utiliser
+          loader: 'babel-loader',
+          // On souhaite que Babel puisse accepter dans sa transpilation, la plus récente version de JS (preset-env), et comprendre le JSX (preset-react)
+          options: {
+            presets: ['@babel/preset-env', '@babel/preset-react']
+          }
         }
-    }
-    
-  //
-    
+      }
+    ]
+  }
 }
 ```
 
@@ -125,13 +122,14 @@ touch src/index.html
 
 ```js
 import React from "react";
-import ReactDOM from "react-dom";
-import App from "./components/App";
+import ReactDOM from "react-dom/client";
+import App from "./components/App.jsx";
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 ```
 
-- Fichier App.js
+- Fichier App.jsx
 
 ```jsx
 import React, { Component } from 'react';
@@ -156,8 +154,10 @@ export default App;
   - `--hot`  : permet de déplacer des modules si nécessaire, sans redémarrer toute l'application
 
 ```json
-"scripts": {
-   "start": "webpack-dev-server --mode development --open --hot"
+{
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open --hot"
+  } 
 }
 ```
 
@@ -165,8 +165,10 @@ export default App;
 Rappel, c'est cette commande qui va remplir le dossier `dist` que nous avons précisé en `output` dans `webpack.config.js`.
 
 ```json
-"scripts": {
-   "start": "webpack-dev-server --mode development --open --hot",
-   "build": "webpack --mode production"
+{
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open --hot",
+    "build": "webpack --mode production"
+  } 
 }
 ```
