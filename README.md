@@ -21,7 +21,7 @@ Le **principal avantage** de ne pas passer par CRA, c'est de **mieux maîtriser 
 
 - Webpack : qui permet de centraliser les bundles que nous allons utiliser (important pour Babel). Il va invoquer plusieurs bundles, pour produire ensuite des fichiers codifiés.
 
-- Babel-loader : il s'agit d'un loader de babel. Soit soit une dépendance spéciale qui permet de dicter à webpack, comment utiliser le transpilateur Babel des **types de fichiers pour ensuite les transpiler en d'autres formats**. Il est possible d'utiliser Babel manuellement, mais l'intérêt d'utiliser Webpack, permet de simplifier cette gestion.
+- Babel-loader : il s'agit d'un loader de babel. Soit une dépendance spéciale qui permet de dicter à webpack, comment utiliser le transpilateur Babel des **types de fichiers pour ensuite les transpiler en d'autres formats**. Il est possible d'utiliser Babel manuellement, mais l'intérêt d'utiliser Webpack, permet de simplifier cette gestion.
 
 Il existe d'autres loaders :
 
